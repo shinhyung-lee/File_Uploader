@@ -6,10 +6,25 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  output   = "../node_modules/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id  Int @id @default(autoincrement())
+  username String 
+  password String 
+  files File[]
+}
+
+model File {
+  id Int @id @default(autoincrement())
+  uploadedAt DateTime @default(now())
+  title String @db.VarChar(255)
+  author User @relation(fields: [authorId], references: [id])
+  authorId Int
 }
